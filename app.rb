@@ -2,12 +2,10 @@ require 'sinatra'
 require 'sinatra/reloader' if development?
 require 'fileutils'
 
-# アップロード先
 UPLOAD_DIR = File.join(settings.public_folder, 'uploads')
 FileUtils.mkdir_p(UPLOAD_DIR)
 
 get '/' do
-  # アップロード済みの曲一覧
   @songs = Dir.glob("#{UPLOAD_DIR}/*").map { |f| File.basename(f) }
   erb :index
 end
@@ -21,3 +19,7 @@ post '/upload' do
     "ファイルを選択してください"
   end
 end
+
+# Render の PORT 環境変数を使用
+set :port, ENV.fetch('PORT', 4567)
+set :bind, '0.0.0.0'
